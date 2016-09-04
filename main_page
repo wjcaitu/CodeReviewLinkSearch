@@ -1,0 +1,764 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>
+    
+    Recent Issues -
+    
+      
+    
+    Code Review
+  </title>
+  <link rel="icon" href="/static/favicon.ico" />
+  <link type="text/css" rel="stylesheet" href="/static/styles.css?1d3a5d08b58ce40" />
+  <script type="text/javascript" src="/static/script.js?1d3a5d08b58ce40"></script>
+  <script type="text/javascript" src="/static/jquery.js"></script>
+  <script type="text/javascript" src="/static/jquery.tablesorter.min.js"></script>
+  <link rel="alternate" type="application/atom+xml"
+   	title="Recent Issues"
+   	href="/rss/all" />
+   
+    
+   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+</head>
+
+<body onunload="M_unloadPage();">
+
+<div style="display:none">
+  <a id="base_url_link" href="/"></a>
+  <a id="media_url_link" href="/static/"></a>
+  
+</div>
+
+<!-- Begin help window -->
+<script type="text/javascript"><!--
+var xsrfToken = '';
+var helpDisplayed = false;
+document.onclick = M_clickCommon;
+var media_url = $('#media_url_link').attr('href');
+var base_url = $('#base_url_link').attr('href');
+
+
+// -->
+</script>
+
+<script><!--
+
+  function linkirizeTR() {
+    // IE (tried 8.0) joins all lines together when textcontent is applied
+    // as html
+    if ($.browser.msie) return;
+    if (!$("#site_name").text().match(/SGSN/)) {
+      return;
+    }
+    var re = /(TR *(\d{5,8}))|(SGSN|sgsn)(0{0,4})([^0][0-9]{2,7})/;
+    $("pre").each(function (index, element) {
+      var old = $(element).html();
+      var match = old.match(re);
+      if (!match) return;
+      var link;
+      if (match[2]) {
+        link = normlink(match[2]);
+      } else if (match[5]) {
+        link = normlink(match[5]);
+      }
+      var replaced = old.replace(re, "<a href='/codereview/cqgw/"+link+"'>"+match[0]+"</a>")
+      $(element).html(replaced);
+    });
+  }
+
+  function normlink(num) {
+    var link = "SGSN";
+    for (var len = (8 - num.length); len > 0; len--) {
+       link += "0";
+    }
+    link += num;
+    return link;
+  }
+
+  $(document).ready(linkirizeTR);
+// -->
+</script>
+
+<div id="help" style="display: none;">
+
+<div style="font-size: medium; text-align: center;">Keyboard Shortcuts</div>
+<hr />
+<table width="100%">
+
+  <tr valign="top">
+    <td>
+      <table width="100%">
+        <tr>
+          <td></td><th>File</th>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">u</span> <b>:</b></td><td>up to issue</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">m</span> <b>:</b></td><td>publish + mail comments</td>
+        </tr>
+	<tr>
+	  <td class="shortcut"><span class="letter">M</span> <b>:</b></td><td>edit review message</td>
+	</tr>
+        <tr>
+          <td class="shortcut"><span class="letter">j</span> / <span class="letter">k</span> <b>:</b></td><td>jump to file after / before current file</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">J</span> / <span class="letter">K</span> <b>:</b></td><td>jump to next file with a comment after / before current file</td>
+        </tr>
+        <tr>
+          <td></td><th>Side-by-side diff</th>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">i</span> <b>:</b></td><td>toggle intra-line diffs</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">e</span> <b>:</b></td><td>expand all comments</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">c</span> <b>:</b></td><td>collapse all comments</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">s</span> <b>:</b></td><td>toggle showing all comments</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">n</span> / <span class="letter">p</span> <b>:</b></td><td>next / previous diff chunk or comment</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">N</span> / <span class="letter">P</span> <b>:</b></td><td>next / previous comment</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">&lt;Enter&gt;</span> <b>:</b></td><td>respond to / edit current comment</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table width="100%"> 
+        <tr>
+         <td></td><th>Issue</th>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">u</span> <b>:</b></td><td>up to list of issues</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">m</span> <b>:</b></td><td>publish + mail comments</td>
+        </tr>
+	<tr>
+	  <td class="shortcut"><span class="letter">j</span> / <span class="letter">k</span> <b>:</b></td><td>jump to patch after / before current patch</td>
+	</tr>
+	<tr>
+	  <td class="shortcut"><span class="letter">o</span> / <span class="letter">&lt;Enter&gt;</span> <b>:</b></td><td>open current patch in side-by-side view</td>
+	</tr>
+	<tr>
+	  <td class="shortcut"><span class="letter">i</span> <b>:</b></td><td>open current patch in unified diff view</td>
+	</tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td></td><th>Issue List</th></tr>
+        <tr>
+          <td class="shortcut"><span class="letter">j</span> / <span class="letter">k</span> <b>:</b></td><td>jump to issue after / before current issue</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">o</span> / <span class="letter">&lt;Enter&gt;</span> <b>:</b></td><td>open current issue</td>
+        </tr>
+        <tr>
+	  <td class="shortcut"><span class="letter">#</span> <b>:</b></td>
+	  <td>close issue</td>
+	</tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+          <td></td><th>Comment/message editing</th>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">&lt;Ctrl&gt;</span> + <span class="letter">s</span> <b>:</b></td><td>save comment</td>
+        </tr>
+        <tr>
+          <td class="shortcut"><span class="letter">&lt;Esc&gt;</span> <b>:</b></td><td>cancel edit</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+</div>
+<!-- End help window -->
+
+<div>
+<div class="pull-right">
+
+
+<a class="novisit" href="http://sgsnmmewiki.mo.sw.ericsson.se/wiki/index.php/Code_Review_Online">Help</a>
+|
+
+
+<a class="novisit" href="/accounts/login/?next=/">Sign in</a>
+|
+<a class="novisit" href="/accounts/register/?next=/">Sign up</a>
+
+</div>
+
+<div id="site_name" style="font-size:x-large"><i><b>SGSN</b></i> Code Reviews</div>
+
+
+</div>
+
+<div class="counter">(44)</div>
+<div class="mainmenu">
+  
+  <a href="/" class="active">Issues</a>
+
+
+</div>
+<div class="mainmenu2">
+  
+  
+    <a class="novisit" href="/">Recent Issues (open)</a>
+    |
+    <a class="novisit" href="/?closed=1">Recent Issues (all)</a>
+    |
+    <a class="novisit" href="/accounts/login/?next=/">Sign in</a>
+    
+  
+
+</div>
+
+<div>
+
+<script language="JavaScript" type="text/javascript"><!--
+function keyPressIntermediary(evt) {
+  return M_dashboardKeyPress(evt);
+}
+document.onkeypress = keyPressIntermediary;
+-->
+</script>
+<h2>Recent Issues</h2>
+
+<div class="issue-list">
+  <div class="pagination">
+    
+    
+    <b>1 - 10</b>
+    <a class="novisit" href="/all?offset=10&amp;limit=10">Older &rsaquo;</a>
+    
+  </div>
+
+  <table id="queues">
+    
+      <thead>
+<tr align="left">
+  <th class="first"></th>
+  <th></th>
+  <th>Id</th>
+  <th>Subject</th>
+  <th>Owner</th>
+  <th>Reviewers</th>
+  <th align="center">Comments</th>
+  <th align="center">Drafts</th>
+  <th>Last updated</th>
+</tr>
+</thead>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19016">
+  
+    
+      <a href="javascript:M_addIssueStar(19016)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19016/show">19016</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19016/show"
+      id="issue-title-19016">SGSN00078277 - capsule failure on Sctp_device_ux after node restart</a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/Nikolay%20Marusin" onMouseOver="M_showUserInfoPopup(this)">Nikolay Marusin</a></div></td>
+  <td><div class="users"><a href="/user/hans.pahne" onMouseOver="M_showUserInfoPopup(this)">hans.pahne</a>, <a href="/user/ervgeza" onMouseOver="M_showUserInfoPopup(this)">ervgeza</a>, <a href="/user/Denis%20Mazur" onMouseOver="M_showUserInfoPopup(this)">Denis Mazur</a>, <a href="/user/Leonid%20Trapeznikov" onMouseOver="M_showUserInfoPopup(this)">Leonid Trapeznikov</a></div></td>
+  <td align="center">1</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+7 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 11:23:14</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19057">
+  
+    
+      <a href="javascript:M_addIssueStar(19057)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19057/show">19057</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19057/show"
+      id="issue-title-19057">ATM771 Default Bearer Activation QCI </a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/Wei%20Wang%20z" onMouseOver="M_showUserInfoPopup(this)">Wei Wang z</a></div></td>
+  <td><div class="users">jason xu s &lt;jason.s.xu, jesper thorell &lt;jesper.thorell, mats thorselius &lt;mats.thorselius, philip wang &lt;philip.wang, thomas castmo &lt;thomas.castmo, robin wang w &lt;robin.w.wang, tomas carlsson &lt;tomas.carlsson, marko jusufovic &lt;marko.jusufovic, ben xie &lt;ben.xie, junqin zhang &lt;junqin.zhang, sophia hu &lt;sophia.hu, andy zhao &lt;andy.zhao, chao xu x &lt;chao.x.xu, carin henriksen &lt;carin.henriksen, xiaobin zhang &lt;xiaobin.zhang, jeffrey liu l &lt;jeffrey.l.liu, charlotta langner &lt;charlotta.langner, winny han &lt;winny.han, patrik egerdal &lt;patrik.egerdal, emily zhang &lt;emily.zhang, <a href="/user/ehsnyli" onMouseOver="M_showUserInfoPopup(this)">ehsnyli</a>, <a href="/user/xiaobin.zhang" onMouseOver="M_showUserInfoPopup(this)">xiaobin.zhang</a>, <a href="/user/ben.xie" onMouseOver="M_showUserInfoPopup(this)">ben.xie</a>, <a href="/user/philip.wang" onMouseOver="M_showUserInfoPopup(this)">philip.wang</a>, <a href="/user/andy.zhao" onMouseOver="M_showUserInfoPopup(this)">andy.zhao</a>, <a href="/user/tomas.pettersson" onMouseOver="M_showUserInfoPopup(this)">tomas.pettersson</a>, <a href="/user/mats.thorselius" onMouseOver="M_showUserInfoPopup(this)">mats.thorselius</a>, <a href="/user/daniel.kelly" onMouseOver="M_showUserInfoPopup(this)">daniel.kelly</a>, <a href="/user/fredrik.berntson" onMouseOver="M_showUserInfoPopup(this)">fredrik.berntson</a>, <a href="/user/marko.jusufovic" onMouseOver="M_showUserInfoPopup(this)">marko.jusufovic</a>, <a href="/user/maja.liberda" onMouseOver="M_showUserInfoPopup(this)">maja.liberda</a></div></td>
+  <td align="center">19</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+8 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 11:22:17</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19044">
+  
+    
+      <a href="javascript:M_addIssueStar(19044)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19044/show">19044</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19044/show"
+      id="issue-title-19044">Pearl performance sprint </a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/thomas.castmo" onMouseOver="M_showUserInfoPopup(this)">thomas.castmo</a></div></td>
+  <td><div class="users"><a href="/user/thomas.castmo" onMouseOver="M_showUserInfoPopup(this)">thomas.castmo</a>, <a href="/user/Johan%20Landtmanson" onMouseOver="M_showUserInfoPopup(this)">Johan Landtmanson</a>, <a href="/user/robin.w.wang" onMouseOver="M_showUserInfoPopup(this)">robin.w.wang</a>, <a href="/user/andy.zhao" onMouseOver="M_showUserInfoPopup(this)">andy.zhao</a>, <a href="/user/EpsTar" onMouseOver="M_showUserInfoPopup(this)">EpsTar</a>, <a href="/user/manne.liden" onMouseOver="M_showUserInfoPopup(this)">manne.liden</a>, <a href="/user/sofia.svensson" onMouseOver="M_showUserInfoPopup(this)">sofia.svensson</a>, <a href="/user/ervjest" onMouseOver="M_showUserInfoPopup(this)">ervjest</a>, <a href="/user/mats.thorselius" onMouseOver="M_showUserInfoPopup(this)">mats.thorselius</a></div></td>
+  <td align="center">29</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+28 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 11:02:03</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19108">
+  
+    
+      <a href="javascript:M_addIssueStar(19108)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19108/show">19108</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19108/show"
+      id="issue-title-19108">sgsn00078375</a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/xiaohong.jiang" onMouseOver="M_showUserInfoPopup(this)">xiaohong.jiang</a></div></td>
+  <td><div class="users"><a href="/user/winny.han" onMouseOver="M_showUserInfoPopup(this)">winny.han</a></div></td>
+  <td align="center"></td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+32 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:58:01</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-18954">
+  
+    
+      <a href="javascript:M_addIssueStar(18954)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/18954/show">18954</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/18954/show"
+      id="issue-title-18954">SGSN00078059 mobility_event_log and au_data_log</a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/Lily%20Xu%20J" onMouseOver="M_showUserInfoPopup(this)">Lily Xu J</a></div></td>
+  <td><div class="users"><a href="/user/Lily%20Xu%20J" onMouseOver="M_showUserInfoPopup(this)">Lily Xu J</a>, <a href="/user/junqin.zhang" onMouseOver="M_showUserInfoPopup(this)">junqin.zhang</a>, <a href="/user/bo.sun" onMouseOver="M_showUserInfoPopup(this)">bo.sun</a>, <a href="/user/philip.wang" onMouseOver="M_showUserInfoPopup(this)">philip.wang</a>, <a href="/user/jeffrey.l.liu" onMouseOver="M_showUserInfoPopup(this)">jeffrey.l.liu</a></div></td>
+  <td align="center">80</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+34 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:56:31</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19100">
+  
+    
+      <a href="javascript:M_addIssueStar(19100)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19100/show">19100</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19100/show"
+      id="issue-title-19100">ATM781_Sprint1_internal_CodeReview </a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/shiyu.yang" onMouseOver="M_showUserInfoPopup(this)">shiyu.yang</a></div></td>
+  <td><div class="users"><a href="/user/shiyu.yang" onMouseOver="M_showUserInfoPopup(this)">shiyu.yang</a>, <a href="/user/lin.jin" onMouseOver="M_showUserInfoPopup(this)">lin.jin</a>, <a href="/user/yufeng.zhou" onMouseOver="M_showUserInfoPopup(this)">yufeng.zhou</a>, <a href="/user/james.zou" onMouseOver="M_showUserInfoPopup(this)">james.zou</a>, <a href="/user/luna.zhao" onMouseOver="M_showUserInfoPopup(this)">luna.zhao</a></div></td>
+  <td align="center">101</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+40 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:50:04</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19107">
+  
+    
+      <a href="javascript:M_addIssueStar(19107)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19107/show">19107</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19107/show"
+      id="issue-title-19107">flytta adp_comte/* till adp_oms_com </a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/anders.j.karlsson" onMouseOver="M_showUserInfoPopup(this)">anders.j.karlsson</a></div></td>
+  <td><div class="users"><a href="/user/jonas.b.berg" onMouseOver="M_showUserInfoPopup(this)">jonas.b.berg</a>, <a href="/user/Johan%20Landtmanson" onMouseOver="M_showUserInfoPopup(this)">Johan Landtmanson</a></div></td>
+  <td align="center"></td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+51 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:39:13</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19034">
+  
+    
+      <a href="javascript:M_addIssueStar(19034)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19034/show">19034</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19034/show"
+      id="issue-title-19034">TRSGSN00078060</a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/george.wang" onMouseOver="M_showUserInfoPopup(this)">george.wang</a></div></td>
+  <td><div class="users"><a href="/user/junqin.zhang" onMouseOver="M_showUserInfoPopup(this)">junqin.zhang</a>, <a href="/user/Johan%20Landtmanson" onMouseOver="M_showUserInfoPopup(this)">Johan Landtmanson</a>, <a href="/user/ella.yao" onMouseOver="M_showUserInfoPopup(this)">ella.yao</a>, <a href="/user/tomas.pettersson" onMouseOver="M_showUserInfoPopup(this)">tomas.pettersson</a>, <a href="/user/ben.xie" onMouseOver="M_showUserInfoPopup(this)">ben.xie</a></div></td>
+  <td align="center">7</td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+1 hour, 1 minute ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:29:43</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-18968">
+  
+    
+      <a href="javascript:M_addIssueStar(18968)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/18968/show">18968</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/18968/show"
+      id="issue-title-18968">sgsn00078131 </a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/winnie.l.lin" onMouseOver="M_showUserInfoPopup(this)">winnie.l.lin</a></div></td>
+  <td><div class="users"></div></td>
+  <td align="center"></td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+1 hour, 24 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:06:02</div>
+  </td>
+</tr>
+
+      
+        
+<tr  name="issue">
+  <td class="first" width="14"><img src="/static/closedtriangle.gif" 
+    style="visibility: hidden;" width="12" height="9" /></td>
+  <td width="34" align="left" style="white-space: nowrap"><span id="issue-star-19048">
+  
+    
+      <a href="javascript:M_addIssueStar(19048)">
+	<img src="/static/star-dark.gif" width="15" height="15" border="0"></a>
+    
+  
+</span>
+
+</td>
+  <td align="right"><div class="subject"><a class="noul"
+         href="/19048/show">19048</a>
+     </div>
+  </td>
+  <td>
+    <div class="subject">
+      <a class="noul" href="/19048/show"
+      id="issue-title-19048">sgsn00078130</a>
+      
+    </div>
+  </td>
+  <td><div class="users"><a href="/user/york.yin" onMouseOver="M_showUserInfoPopup(this)">york.yin</a></div></td>
+  <td><div class="users"><a href="/user/winny.han" onMouseOver="M_showUserInfoPopup(this)">winny.han</a>, <a href="/user/xiaohong.jiang" onMouseOver="M_showUserInfoPopup(this)">xiaohong.jiang</a></div></td>
+  <td align="center"></td>
+  <td align="center"><b></b></td>
+  <td class="last">
+    <div class="date">
+
+
+
+
+1 hour, 29 minutes ago
+
+
+
+
+</div>
+    <div class="dateraw" style="display:none">2015-04-21 10:01:38</div>
+  </td>
+</tr>
+
+      
+    
+  </table>
+
+  <div class="pagination">
+    
+    
+    <b>1 - 10</b>
+    <a class="novisit" href="/all?offset=10&amp;limit=10">Older &rsaquo;</a>
+    
+  </div>
+
+</div>
+
+<script language="JavaScript" type="text/javascript"><!--
+var dashboardState = new M_DashboardState(window,'issue');
+-->
+</script>
+
+</div>
+
+  
+
+
+<p />
+<div style="float: left; color:grey">
+  Powered by <a target="_blank" href="http://www.djangoproject.com/">Django</a> and 
+  <a target="_blank" href="http://code.google.com/p/rietveld">Rietveld</a>
+</div>
+
+<div class="extra" style="font-size: 9pt; float: right; text-align: right;">
+  <div style="height:14px;">
+  <img src="/static/rss.gif" alt="RSS Feeds" width="14" height="14"
+       align="top" />
+  <a href="/rss/all">Recent Issues</a>
+  
+   
+  </div>
+  <div style="margin-top: .3em;"></div>
+</div>
+
+</body>
+</html>
